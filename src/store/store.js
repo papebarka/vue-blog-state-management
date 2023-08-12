@@ -4,11 +4,12 @@ import { Posts } from './posts.js'
 
 const delay = () => new Promise(res => setTimeout(res, 1000))
 
-export const store = createStore({
+const posts = {
+    namespaced: true,
     state(){
         return {
             count: 0,
-            posts: [],
+            all: [],
             postId: null
         }
     },
@@ -19,7 +20,7 @@ export const store = createStore({
         },
 
         SETPOSTS(state, posts){
-            state.posts = posts
+            state.all = posts
             //console.log('In setposts')
         },
 
@@ -30,7 +31,7 @@ export const store = createStore({
     },
 
     actions: {
-        async fetchPosts(ctx){
+        async fetch(ctx){
             await delay()
             ctx.commit('SETPOSTS', Posts)
         }
@@ -38,9 +39,15 @@ export const store = createStore({
 
     getters: {
         currentPost(state){
-            return state.posts.find(x => {
+            return state.all.find(x => {
                 return x.id === state.postId
             })
         }
+    }
+}
+
+export const store = createStore({
+    modules: {
+        posts
     }
 })

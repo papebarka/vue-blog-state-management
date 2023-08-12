@@ -8,21 +8,21 @@ const store = useStore()
 
 const click = (post) => {
   //store.commit('INCREMENT')
-  store.commit('setPostId', post.id)
+  store.commit('posts/setPostId', post.id)
 }
 
 const fetchData = () => {
-  store.dispatch('fetchPosts')
+  store.dispatch('posts/fetch')
 }
 
 onMounted(() => {
   fetchData()
 })
 
-const posts = computed(() => store.state.posts)
+const posts = computed(() => store.state.posts.all)
 console.log(posts)
 
-const currentPost = computed(() => store.getters.currentPost)
+const currentPost = computed(() => store.getters['posts/currentPost'])
 </script>
 
 <template>
