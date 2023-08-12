@@ -1,21 +1,37 @@
 <script setup>
+import { computed, onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useStore } from 'vuex'
 import HelloWorld from './components/HelloWorld.vue'
 
 const store = useStore()
 
-const click = () => {
-  store.commit('INCREMENT')
+const click = (post) => {
+  //store.commit('INCREMENT')
+  store.commit('setPostId', post.id)
 }
+
+const fetchData = () => {
+  store.dispatch('fetchPosts')
+}
+
+onMounted(() => {
+  fetchData()
+})
+
+const posts = computed(() => store.state.posts)
+console.log(posts)
+
+const currentPost = computed(() => {
+  return store.state.posts.find(x => {
+    return x.id === store.state.postId
+  })
+})
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -29,7 +45,18 @@ const click = () => {
   </p>
 
   <div>
-    <button @click="click">INCREMENT</button>
+    <button
+      v-for="post in posts"
+      :key="post.id"
+      @click="click(post)"
+    >
+      {{ post.title }}
+    </button>
+  </div>
+
+  <div v-if="currentPost">
+    <h2>{{ currentPost.title }}</h2>
+    <h4>{{ currentPost.content }}</h4>
   </div>
   <RouterView />
 </template>
