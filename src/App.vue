@@ -22,11 +22,7 @@ onMounted(() => {
 const posts = computed(() => store.state.posts)
 console.log(posts)
 
-const currentPost = computed(() => {
-  return store.state.posts.find(x => {
-    return x.id === store.state.postId
-  })
-})
+const currentPost = computed(() => store.getters.currentPost)
 </script>
 
 <template>
